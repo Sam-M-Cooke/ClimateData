@@ -40,5 +40,7 @@ data %>%
          rain_mm = parse_number(rain_mm),
          sun = parse_number(sun),
          station = parse_factor(station)) %>% 
-  drop_na(year) %>% 
+  drop_na(year) -> weatherdata
+
+weatherdata %>% 
   write_csv('weatherdata.csv')
