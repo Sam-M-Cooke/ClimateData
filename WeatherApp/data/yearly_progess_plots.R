@@ -6,6 +6,7 @@ library(showtext)
 showtext_auto()
 
 colour <- c("#BCD2E8",'#91BAD6', '#73A5C6', '#528AAE','#2E5984', '#1E3F66')
+heat <- c('#B31313','#FF9000','#FDDA16','#FFEE82')
 
 theme_set(theme_minimal())
 theme_replace(text = element_text(family = "Rubik", size = 20, colour = colour[5]),
@@ -43,10 +44,7 @@ sheffield %>%
 
 
 
-heat <- c('#B31313',
-          '#FF9000',
-          '#FDDA16',
-          '#FFEE82')
+
   
 sheffield %>% mutate(avg_temp = (temp_max+temp_min)/2) %>% 
   mutate(month = lubridate::month(month, label = TRUE)) %>% 
@@ -98,10 +96,7 @@ weatherdata %>%
   ylab("Year-to-date average temperature (celcius)") -> plot4
 
 
-ggsave('plot1.jpg',plot1,device = "jpg",scale = .8, height = 9, width = 16, units = 'cm', dpi = 400)
-ggsave('plot2.jpg',plot2,device = "jpg",scale = .8, height = 9, width = 16, units = 'cm', dpi = 400)
-ggsave('plot3.jpg',plot3,device = "jpg", height = 9, width = 16, units = 'cm', dpi = 400)
-ggsave('plot4.jpg',plot4,device = "jpg", height = 9, width = 16, units = 'cm', dpi = 400)
+
 
   
 weatherdata %>% 
@@ -112,10 +107,13 @@ weatherdata %>%
   filter(month == 'Jul') %>%
   ggplot(aes(y=ytd_rain, x=station))+
   geom_jitter(alpha = 0.4, colour = colour[2])+
-  geom_boxplot(alpha = 0.3, outlier.alpha = 0)+
-  geom_point(data = . %>% filter(year==2022), colour = colour[4], size = 3)+
+  geom_boxplot(alpha = 0.3, outlier.alpha = 0, colour = colour[3])+
+  geom_point(data = . %>% filter(year==2022), colour = colour[5], size = 2)+
+  geom_text(data = . %>% filter(year==2022 & station == 'Oxford'), aes(label = year), colour = colour[5], nudge_x = .25, size = 10, hjust = 0.2)+
   xlab("Station")+
-  ylab("Rainfall up to July")
+  ylab("Rainfall up to July")+
+  labs(title = "Distribution of yearly rainfall up to July",
+       subtitle = 'How does 2022 compare?') -> plot5
 
 weatherdata %>% 
   filter(station %in% stations) %>% 
@@ -126,6 +124,18 @@ weatherdata %>%
   filter(month == 'Jul') %>%
   ggplot(aes(y=cum_mean_temp, x=station))+
   geom_jitter(alpha = 0.4,colour = heat[2])+
-  geom_boxplot(alpha = 0.3, outlier.alpha = 0)+
-  geom_point(data = . %>% filter(year==2022), colour = heat[1], size = 3)
+  geom_boxplot(alpha = 0.3, outlier.alpha = 0, colour = heat[2])+
+  geom_point(data = . %>% filter(year==2022), colour = heat[1], size = 2)+
+  geom_text(data = . %>% filter(year==2022 & station == 'Oxford'), aes(label = year), colour = heat[1], nudge_x = .25, size = 10, hjust = 0.2)+
+  xlab("Station")+
+  ylab("Cumulative average temperature")+
+  labs(title = "Distribution of cumulative average temperature up to July",
+       subtitle = 'How does 2022 compare?') ->plot6
+
+ggsave('plot1.jpg',plot1,device = "jpg",scale = .8, height = 9, width = 16, units = 'cm', dpi = 400)
+ggsave('plot2.jpg',plot2,device = "jpg",scale = .8, height = 9, width = 16, units = 'cm', dpi = 400)
+ggsave('plot3.jpg',plot3,device = "jpg", height = 9, width = 16, units = 'cm', dpi = 400)
+ggsave('plot4.jpg',plot4,device = "jpg", height = 9, width = 16, units = 'cm', dpi = 400)
+ggsave('plot5.jpg',plot5,device = "jpg", scale = .8, height = 9, width = 12, units = 'cm', dpi = 400)
+ggsave('plot6.jpg',plot6,device = "jpg", scale = .8, height = 9, width = 12, units = 'cm', dpi = 400)
   
