@@ -25,7 +25,6 @@ weatherdata %>%
 #select Sheffield as the station of choice
 weatherdata %>% filter(station == 'Sheffield') -> sheffield
 
-colour <- c("#BCD2E8",'#91BAD6', '#73A5C6', '#528AAE','#2E5984', '#1E3F66')
 
 sheffield %>% 
   mutate(month = lubridate::month(month, label = TRUE)) %>% 
@@ -105,4 +104,28 @@ ggsave('plot3.jpg',plot3,device = "jpg", height = 9, width = 16, units = 'cm', d
 ggsave('plot4.jpg',plot4,device = "jpg", height = 9, width = 16, units = 'cm', dpi = 400)
 
   
+weatherdata %>% 
+  filter(station %in% stations) %>% 
+  mutate(month = lubridate::month(month, label = TRUE)) %>% 
+  group_by(station, year) %>% 
+  mutate(ytd_rain = cumsum(rain_mm)) %>%
+  filter(month == 'Jul') %>%
+  ggplot(aes(y=ytd_rain, x=station))+
+  geom_jitter(alpha = 0.4, colour = colour[2])+
+  geom_boxplot(alpha = 0.3, outlier.alpha = 0)+
+  geom_point(data = . %>% filter(year==2022), colour = colour[4], size = 3)+
+  xlab("Station")+
+  ylab("Rainfall up to July")
 
+weatherdata %>% 
+  filter(station %in% stations) %>% 
+  mutate(avg_temp = (temp_max+temp_min)/2) %>% 
+  mutate(month = lubridate::month(month, label = TRUE)) %>% 
+  group_by(station, year) %>% 
+  mutate(cum_mean_temp = cummean(avg_temp)) %>%
+  filter(month == 'Jul') %>%
+  ggplot(aes(y=cum_mean_temp, x=station))+
+  geom_jitter(alpha = 0.4,colour = heat[2])+
+  geom_boxplot(alpha = 0.3, outlier.alpha = 0)+
+  geom_point(data = . %>% filter(year==2022), colour = heat[1], size = 3)
+  
