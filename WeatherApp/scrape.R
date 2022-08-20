@@ -39,8 +39,11 @@ data %>%
          frost_days = parse_number(frost_days),
          rain_mm = parse_number(rain_mm),
          sun = parse_number(sun),
+         station = str_extract(station, "[^(   |/)]*"), 
          station = parse_factor(station)) %>% 
   drop_na(year) -> weatherdata
+
+levels(weatherdata$station)
 
 weatherdata %>% 
   write_csv('weatherdata.csv')
