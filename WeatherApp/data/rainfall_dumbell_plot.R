@@ -62,3 +62,6 @@ plot_data %>%
 
 
 ggsave('Dumbellplot.jpg', plot,device = "jpg", scale = .8, height = 12, width = 9, units = 'cm', dpi = 600)
+
+
+  

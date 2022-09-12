@@ -124,13 +124,13 @@ weatherdata %>%
   filter(month == 'Jul') %>%
   ggplot(aes(y=cum_mean_temp, x=station))+
   geom_jitter(alpha = 0.4,colour = heat[2])+
-  geom_boxplot(alpha = 0.3, outlier.alpha = 0, colour = heat[2])+
+  geom_boxplot(alpha = 0.2, outlier.alpha = 0, colour = heat[1], size = 0.2)+
   geom_point(data = . %>% filter(year==2022), colour = heat[1], size = 2)+
   geom_text(data = . %>% filter(year==2022 & station == 'Oxford'), aes(label = year), colour = heat[1], nudge_x = .25, size = 10, hjust = 0.2)+
   xlab("Station")+
   ylab("Cumulative average temperature")+
   labs(title = "Distribution of cumulative average temperature up to July",
-       subtitle = 'How does 2022 compare?') ->plot6
+       subtitle = 'How does 2022 compare?') -> plot6
 
 ggsave('plot1.jpg',plot1,device = "jpg",scale = .8, height = 9, width = 16, units = 'cm', dpi = 400)
 ggsave('plot2.jpg',plot2,device = "jpg",scale = .8, height = 9, width = 16, units = 'cm', dpi = 400)
